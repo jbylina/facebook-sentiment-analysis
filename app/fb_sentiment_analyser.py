@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_socketio import send
 from urllib.parse import urlparse, parse_qs
 from app import app, socketio, fb
@@ -8,8 +8,14 @@ from app import app, socketio, fb
 def main():
     return app.send_static_file('index.html')
 
+@app.errorhandler(404)
+def angularRedirect(error):
+    if request.path.startswith(('/api', '/images', '/styles')):
+        return error
+    else:
+        return main()
 
-@app.route('/hello')
+@app.route('/api/hello')
 def hello():
     obj = get_all_connections('WirtualnaPolska', 'posts')
 
@@ -26,8 +32,19 @@ def hello():
 
     return jsonify(ret)
 
+@app.route('/api/analyze')
+def analyze():
+    pageUrl = request.args['pageUrl']
+    return jsonify({
+        'pageUrl': pageUrl,
+        'results': {
+            'positive': {'text': "positive comments", 'count': 12},
+            'neutral': {'text': "neutral comments", 'count': 4},
+            'negative': {'text': "negative comments", 'count': 20}
+            }
+        })
 
-@socketio.on('message')
+@socketio.on('/api/message')
 def handle_message(message):
     print('received message: ' + str(message))
     send(message)
