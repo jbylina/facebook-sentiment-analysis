@@ -1,7 +1,7 @@
-from flask import jsonify, request
+import time
+from flask import jsonify, request, url_for
 from flask_socketio import send
-from urllib.parse import urlparse, parse_qs
-from app import app, socketio, fb
+from app import app, socketio, celery
 
 
 @app.route('/')
@@ -15,10 +15,53 @@ def angularRedirect(error):
     else:
         return main()
 
-@app.route('/api/hello')
-def hello():
+
+@app.route('/api/reports/<fanpage_name>')
+def get_report(fanpage_name):
+    # TODO: check database
+
+    return '', 404
+
+
+@celery.task
+def fanpage_analyzer(fanpage_name):
+    """Background task that runs a long function with progress reports."""
+
+    for i in range(1, 10):
+        print("Analyzer loop for " + fanpage_name + " : " + str(i))
+        time.sleep(5)
+
+
+@app.route('/api/analyze', methods=['POST'])
+def analyze_post():
+    data = request.json
+    url = data['url']
+
+    task = fanpage_analyzer.delay(url)
+    return jsonify({
+        "task": task.id
+    }), 202
+
     obj = get_all_connections('WirtualnaPolska', 'posts')
 
+    ret = {
+
+    }
+    # for index, item in enumerate(obj):
+    #     print(item)
+    #
+    #     post_id = item.get('id')
+    #     comments = fb.get_connections(post_id, 'comments')
+    #     item['comments'] = comments
+    #     ret.append(item)
+    #     if index == 99:
+    #         break
+
+    return jsonify(ret)
+
+
+@app.route('/api/hello')
+def hello():
     ret = []
     # for index, item in enumerate(obj):
     #     print(item)
@@ -31,6 +74,7 @@ def hello():
     #         break
 
     return jsonify(ret)
+
 
 @app.route('/api/analyze')
 def analyze():
@@ -48,15 +92,3 @@ def analyze():
 def handle_message(message):
     print('received message: ' + str(message))
     send(message)
-
-
-def get_all_connections(id, connection, **args):
-    while True:
-        page = fb.get_connections(id, connection, **args)
-        for item in page['data']:
-            yield item
-        next = page.get('paging', {}).get('next')
-        if not next:
-            return
-        args = parse_qs(urlparse(next).query)
-        del args['access_token']

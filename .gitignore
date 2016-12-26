@@ -135,3 +135,6 @@ fabric.properties
 
 # application config files
 config.ini
+
+redis-*/
+.cache/
