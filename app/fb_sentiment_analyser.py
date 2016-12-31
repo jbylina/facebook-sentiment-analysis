@@ -2,18 +2,13 @@ import time
 from flask import jsonify, request, url_for
 from flask_socketio import send
 from app import app, socketio, celery
+from app.db_resource import get_db
 
 
 @app.route('/')
-def main():
+def root():
+    db = get_db()
     return app.send_static_file('index.html')
-
-@app.errorhandler(404)
-def angularRedirect(error):
-    if request.path.startswith(('/api', '/images', '/styles')):
-        return error
-    else:
-        return main()
 
 
 @app.route('/api/reports/<fanpage_name>')
