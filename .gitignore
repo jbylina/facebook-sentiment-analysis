@@ -139,3 +139,4 @@ config.ini
 redis-*/
 .cache/
 database.sqlite
+node_modules
