@@ -9,6 +9,7 @@ angular
         var self = this;
         self.targetUrl = $routeParams.pageUrl;
         self.analyzePage = function analyzePage(pageUrl) {
+          console.log(pageUrl); //TODO check&rmv
           console.log($location.absUrl()); //TODO check&rmv
           $location.path('/chart').search({pageUrl: pageUrl});
           console.log($location.absUrl()); //TODO check&rmv

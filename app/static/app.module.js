@@ -9,5 +9,6 @@ angular
     'ngSanitize',
     'core',
     'chart',
-    'pageInput'
+    'pageInput',
+    'chart.js'
   ]);

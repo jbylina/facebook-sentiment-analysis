@@ -13,6 +13,8 @@ angular
         response.$promise.then(function (data) {
           var items = response.results;
           self.results = [items.positive, items.neutral, items.negative];
+          self.labels = [items.positive.text, items.neutral.text, items.negative.text];
+          self.data = [items.positive.count, items.neutral.count, items.negative.count];
         });
       }
     ]

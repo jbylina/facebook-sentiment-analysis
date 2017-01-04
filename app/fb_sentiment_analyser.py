@@ -10,9 +10,19 @@ def root():
     db = get_db()
     return app.send_static_file('index.html')
 
+# allows use of deep links, ie '/chart?pageUrl=facebook.com/cocacola'
+# will correctly redirect to '/' ng app and the app will correctly navigate internally to requested view
+@app.errorhandler(404)
+def angular_redirect(error):
+    if request.path.startswith(('/api', '/images', '/styles', '/node_modules')):
+        return error
+    else:
+        return root()
+
 
 @app.route('/api/reports/<fanpage_name>')
 def get_report(fanpage_name):
+    
     # TODO: check database
 
     return '', 404
@@ -27,7 +37,7 @@ def fanpage_analyzer(fanpage_name):
         time.sleep(5)
 
 
-@app.route('/api/analyze', methods=['POST'])
+#@app.route('/api/analyze', methods=['POST'])
 def analyze_post():
     data = request.json
     url = data['url']
