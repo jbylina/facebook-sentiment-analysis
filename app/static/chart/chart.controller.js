@@ -3,7 +3,6 @@
 angular
     .module('sentimentAnalysisApp')
     .controller('ChartCtrl', ['$scope', 'Analyze', '$routeParams', function ($scope, Analyze, $routeParams) {
-        var self = this;
         $scope.pageUrl = $routeParams.pageUrl;
         // send page request
         Analyze.query({pageUrl: $routeParams.pageUrl}, function (data) {

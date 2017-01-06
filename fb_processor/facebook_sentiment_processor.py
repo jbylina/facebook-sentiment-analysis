@@ -6,7 +6,7 @@ class FacebookSentimentProcessor:
     def __init__(self, facebook_resource: FacebookResource):
         self.fb = facebook_resource
 
-    def process_fanpage(self, fanpage: str, post_limit: int = 100, event_callback=None):
+    def process_fanpage(self, fanpage: str, post_limit: int = 100, event_callback=lambda a, b: None):
         fanpage = self.fb.extract_fanpage_name_from_url(fanpage)
 
         reports = []

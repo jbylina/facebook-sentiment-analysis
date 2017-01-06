@@ -17,7 +17,7 @@ class TestFacebookProcessor:
         assert 'created_time' in obj[0]
 
     def test_should_get_ten_comments(self):
-        obj = self.tested_obj.get_all_comments('90593452375', '10154956421562376')
+        obj = self.tested_obj.get_all_comments('90593452375_10154956421562376')
         obj = list(itertools.islice(obj, 10))
 
         assert len(obj) == 10

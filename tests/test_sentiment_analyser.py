@@ -1,3 +1,5 @@
+import pytest
+
 from fb_processor.facebook_sentiment_processor import *
 
 
@@ -18,7 +20,8 @@ class TestFacebookSentimentProcessor:
         print(val)
         assert val > 0
 
+    @pytest.mark.skip(reason="Still in development")
     def test_should_process_fanpage(self):
-        mean = self.tested_obj.process_fanpage('facebook.com/CNN/', post_limit=10)
+        mean = self.tested_obj.process_fanpage('facebook.com/CNN/', post_limit=2)
         print(mean)
         assert mean > 0
