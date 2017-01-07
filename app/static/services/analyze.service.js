@@ -1,0 +1,1 @@
+'use strict';angular.module('sentimentAnalysisApp')    .factory('Analyze', ['$resource', function ($resource) {        return $resource('/api/analyze/', {}, {            processPage: {                method: 'POST'            }        });    }])    .factory('RealtimeAnalyze', ['socketFactory', function (socketFactory) {        return socketFactory();    }]);

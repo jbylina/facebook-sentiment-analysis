@@ -1,1 +1,0 @@
-'use strict';angular.module('sentimentAnalysisApp')    .factory('Analyze', ['$resource', function ($resource) {        return $resource('/api/analyze/', {}, {            query: {                method: 'GET'            }        });    }]);

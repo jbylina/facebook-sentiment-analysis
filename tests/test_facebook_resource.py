@@ -1,11 +1,16 @@
+from fb_processor.fb_resource import *
+from configparser import ConfigParser
 import pytest
-
-from fb_processor.facebook_resource import *
 import itertools
 
 
 class TestFacebookProcessor:
-    tested_obj = FacebookResource()
+
+    def __init__(self):
+        cfg_dict = ConfigParser()
+        cfg_dict.read('config.ini')
+        cfg_dict = cfg_dict['default']
+        self.tested_obj = FacebookResource(cfg_dict['FB_APP_ID'], cfg_dict['FB_APP_SECRET'])
 
     def test_should_get_ten_posts(self):
         obj = self.tested_obj.get_all_posts('CNNInternationalPoland')

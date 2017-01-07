@@ -7,18 +7,19 @@ angular
         'ngResource',
         'ngRoute',
         'ngSanitize',
-        'chart.js'
+        'chart.js',
+        'btford.socket-io'
     ]).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
         $routeProvider
             .when('/', {
-                templateUrl: 'new-analysis/new-analysis.tpl.html',
-                controller: 'NewAnalysisCtrl'
+                templateUrl: 'home/home.tpl.html',
+                controller: 'HomeCtrl'
             })
-            .when('/chart/:pageUrl', {
-                templateUrl: 'chart/chart.template.html',
-                controller: 'ChartCtrl'
+            .when('/newAnalysis/:pageUrl', {
+                templateUrl: 'new-analysis/new-analysis.template.html',
+                controller: 'NewAnalysisCtrl'
             })
             .otherwise('/');
     }]);

@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+        <p class="lead">
+            Results for '{{pageUrl}}'
+        </p>
+        <ul>
+            <li ng-repeat="result in results">{{result.text}}: {{result.count}}</li>
+        </ul>
+    </div>
+    <div class="col-md-3">
+        <canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels"></canvas>
+    </div>
+    <div class="container">
+        <h2>Fanpage processing log</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="log in processLogs">
+                <td>{{log.date}}</td>
+                <td>{{log.message}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

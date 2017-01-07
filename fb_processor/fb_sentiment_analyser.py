@@ -1,29 +1,35 @@
-from fb_processor.facebook_resource import *
+import time
+from fb_processor.fb_resource import FacebookResource
+from socketIO_client import SocketIO
 
 
-class FacebookSentimentProcessor:
-
-    def __init__(self, facebook_resource: FacebookResource):
+class FacebookSentimentAnalyser:
+    def __init__(self, facebook_resource: FacebookResource, page: str, post_limit: int = 100):
         self.fb = facebook_resource
+        self.page = page
+        self.post_limit = post_limit
+        self.socket_io = SocketIO('localhost', 5000)
 
-    def process_fanpage(self, fanpage: str, post_limit: int = 100, event_callback=lambda a, b: None):
-        fanpage = self.fb.extract_fanpage_name_from_url(fanpage)
+    def run(self):
+        fanpage = self.fb.extract_fanpage_name_from_url(self.page)
 
         reports = []
         i = 0
         for post in self.fb.get_all_posts(fanpage):
 
             post_report = self.process_post(post)
-            event_callback('POST_PROCESSED', {'post': post,
-                                              'report': post_report})
+            self.publish_status({'status': 'POST_PROCESSED',
+                                 'post': post,
+                                 'report': post_report})
             reports.append(post_report)
 
             i += 1
-            if i > post_limit:
+            if i > self.post_limit:
                 break
 
         final_report = self.merge_and_evalute_score(reports)
-        event_callback('PAGE_PROCESSED', {'report': final_report})
+        self.publish_status({'status': 'PAGE_PROCESSED',
+                             'report': final_report})
         return final_report
 
     def merge_and_evalute_score(self, reports):
@@ -47,3 +53,9 @@ class FacebookSentimentProcessor:
         from textblob import TextBlob
         blob = TextBlob(text)
         return blob.sentiment.polarity
+
+    def publish_status(self, data):
+        self.socket_io.emit('processing_status', {
+            'page': self.page,
+            'data': data
+        })

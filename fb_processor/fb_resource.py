@@ -1,6 +1,5 @@
 import re
 from urllib.parse import urlparse, parse_qs
-from configparser import ConfigParser
 from facebook import GraphAPI
 
 
@@ -8,14 +7,7 @@ class FacebookResource:
 
     FB_URL_PATTERN = re.compile('(?:(?:http|https)://)?(?:www.)?(mbasic.facebook|m\.facebook|facebook|fb)\.(com|me)/')
 
-    def __init__(self, app_id=None, app_secret=None):
-        if app_id is None or app_secret is None:
-            cfg_dict = ConfigParser()
-            cfg_dict.read('config.ini')
-            cfg_dict = cfg_dict['default']
-            app_id = cfg_dict['FB_APP_ID']
-            app_secret = cfg_dict['FB_APP_SECRET']
-
+    def __init__(self, app_id, app_secret):
         self.facebook = GraphAPI()
         self.facebook.access_token = self.facebook.get_app_access_token(app_id, app_secret)
 

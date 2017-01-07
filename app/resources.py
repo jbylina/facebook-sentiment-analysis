@@ -1,6 +1,9 @@
 import sqlite3
+from configparser import ConfigParser
+
 from flask import g
 from app import app
+from fb_processor.fb_resource import FacebookResource
 
 
 @app.before_first_request
@@ -20,6 +23,13 @@ def get_db():
     if db is None:
         db = g._database = sqlite3.connect('database.sqlite')
     return db
+
+
+def get_fb():
+    cfg_dict = ConfigParser()
+    cfg_dict.read('config.ini')
+    cfg_dict = cfg_dict['default']
+    return FacebookResource(cfg_dict['FB_APP_ID'], cfg_dict['FB_APP_SECRET'])
 
 
 @app.teardown_appcontext

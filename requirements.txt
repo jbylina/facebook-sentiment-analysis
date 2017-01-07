@@ -10,6 +10,7 @@ greenlet==0.4.10
 itsdangerous==0.24
 python-engineio==1.1.0
 python-socketio==1.6.1
+socketIO-client==0.7.2
 requests==2.12.3
 six==1.10.0
 celery==4.0.1
